@@ -1,0 +1,21 @@
+Package: ExtractMap
+Type: Package
+Title: Extract values in maps from a set of coordinates
+Version: 1.0.0
+Author: Isabelle Auger, isabelle.auger@mrnf.gouv.qc.ca
+Maintainer: Isabelle Auger <isabelle.auger@mrnf.gouv.qc.ca>
+Description: Functions to extract values in maps from a set of coordinates
+    This package contains maps for iqs potentiels, cartes SIIGSOL, climat normales 30 ans, climat annuel
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    tidyverse,
+    doFuture,
+    raster,
+	sf,
+    R (>= 4.2)
+RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
