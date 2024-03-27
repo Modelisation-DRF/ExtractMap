@@ -13,7 +13,7 @@ This library is distributed with the hope that it will be useful, but WITHOUT AN
 See the license LGPL-3.0 at http://www.gnu.org/copyleft/lesser.html.
 
 ## Introduction
-Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat, en fournissant des coordonnées, à partir de fichiers tif.
+Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat, en fournissant des coordonnées, à partir de fichiers tif fournis dans le package.
 
 ## Documentation et références
 - Les cartes de propriétés de sol ont été téléchargées ici: https://www.donneesquebec.ca/recherche/dataset/siigsol-100m-carte-des-proprietes-du-sol
@@ -49,21 +49,11 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 ?extract_map_plot
 ?extract_climat_an
 ```
-Pour obtenir la liste des data.frame disponibles
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-data(package='TarifQC')
-```
-Pour une description du data.frame
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-?fic_arbres_test
-```
 
 ## Historique des versions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
-| 2024-03-26 | 1.1.3 |  | déplacer les packages de depends à imports dans DESCRIPTION, utiliser la fct mvrnorm de rockchalk au lieu de MASS |
-| 2024-02-22 | 1.1.2 |  | ajout de l'option na.rm=T dans le calcul de la st et densité de chaque placette |
-| 2024-02-20 | 1.1.1 |  | correction de bugs mineurs détectés en utilisant un fichier de samare avec peu d'essences |
-| 2024-02-08 | 1.1.0 | issue #1  | amélioration de la vitesse d'exécution en mode stochastique |
-| 2023-11-30 | 1.0.0 | | première version stable |
+| 2024-03-26 | 1.1.1 |  | déplacer les package de depends à imports dans DESCRIPTION |
+| 2024-03-13 | 1.1.0 | issue #1  | ne fonctionne pas avec quand les cartes sont sauvegardées en objet spatial, les tif doivent être dans le package |
+| 2024-02-15 | 1.0.0 | | première version stable |
