@@ -1,17 +1,125 @@
-test_that("La fonction extract_map_plot retourne le fichier attendu", {
+test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les IQS", {
 
-  carte = cartes_sol
-  couche = 2
-  variable = c("cec","ph")
-  value <- extract_map_plot(file=fic_test, liste_raster=carte, variable=variable, couche=couche)
+  variables <- c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex")
+  value <- extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=variables)
 
-  nom_couche <- tolower(names(carte[[1]])[[couche]])
-  nom_var <- c(paste(variable[1], nom_couche, sep='.'), paste(variable[2], nom_couche, sep='.'))
-  nom_attendu <-  c(names(fic_test), nom_var)
-  expect_equal(names(value),nom_attendu)
+  nom_obtenu <- names(value)[5:13]
+  expect_equal(nom_obtenu, variables)
 
-  expect_equal(nrow(value),nrow(fic_test))
+})
 
+
+test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les variables de sol", {
+
+  variables <- c("cec","ph","mat_org","sable","limon","argile")
+  value <- extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=variables)
+
+  nom_obtenu <- names(value)[5:10]
+  expect_equal(nom_obtenu, variables)
+
+})
+
+
+test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les climat normal 30 ans", {
+
+  variables <- c("aridity", "consecutivedayswithoutfrost")
+  value <- extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables)
+
+  nom_obtenu <- names(value)[5:6]
+  expect_equal(nom_obtenu, variables)
+
+})
+
+test_that("La fonction extract_map_plot retourne une erreur si nom des variables de climat incorrect", {
+  liste_place <- fic_test
+  variables <- c("aridity", "temperature")
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables))
+})
+test_that("La fonction extract_map_plot retourne une erreur si nom des variables de sol incorrect", {
+  liste_place <- fic_test
+  variables <- c("cec", "clay")
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=variables))
+})
+test_that("La fonction extract_map_plot retourne une erreur si nom des variables de IQS incorrect", {
+  liste_place <- fic_test
+  variables <- c("iqs_bop", "iqs_pot_sab")
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=variables))
+})
+
+
+test_that("La fonction extract_map_plot retourne la bonne valeur de climat normal 30 ans", {
+
+  carte <- "cartes_climat"
+  variable = "tmean"
+  liste_place <- fic_test
+  # 47.88455 , -72.64952
+  # 47.43823,  -73.37042
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  # les valeurs attendues ont été extraites de QGIS, en glissant le fichier tif dans un projet et en mettant les 2 coordoonées dans un fichier excel (je l'ai mis sous data_raw)
+  # on glisse ensuite le fichier excel sur la carte dans QGIS. On verra apparaitre les 2 points en rouge.
+  # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
+  # la valeur du point apparait en bas à droit "Résultat de l'identification
+  valeur_attendu <- c(2.49900, 2.12072)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5])),5)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
 
 
 })
+
+test_that("La fonction extract_map_plot retourne la bonne valeur de sol", {
+
+  carte <- "cartes_sol"
+  variable = "cec" # 0-5cm
+  liste_place <- fic_test
+  # 47.88455 , -72.64952
+  # 47.43823,  -73.37042
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  # les valeurs attendues ont été extraites de QGIS, en glissant le fichier tif dans un projet et en mettant les 2 coordoonées dans un fichier excel (je l'ai mis sous data_raw)
+  # on glisse ensuite le fichier excel sur la carte dans QGIS. On va dans la fenêtre de droite et on fait rechercher : on tape créer... et on choisit Créer une couche de points à partir d'une table
+  # Dans la fenêtre qui apparait chsoir les champs pour x et y et cliquer sur Exécuter
+  #  On verra apparaitre les 2 points en rouge.
+  # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
+  # la valeur du point apparait en bas à droit "Résultat de l'identification
+
+  # valeur_attendu <- c(1.814182, 1.148471) # valeurs dans la carte à resolution  100 x 100 m
+  # valeur_attendu <- c(1.875036, 1.325892) # valeurs dans la carte à resolution  500 x 500 m
+  valeur_attendu <- c(1.728613, 1.375691) # valeurs dans la carte à resolution  1000 x 1000 m
+
+  valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),6)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+
+test_that("La fonction extract_map_plot retourne la bonne valeur d'iqs", {
+
+  carte <- "cartes_iqs"
+  variable = "iqs_pot_bop"
+  liste_place <- fic_test
+  # 47.88455 , -72.64952
+  # 47.43823,  -73.37042
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  # les valeurs attendues ont été extraites de QGIS, en glissant le fichier tif dans un projet et en mettant les 2 coordoonées dans un fichier excel (je l'ai mis sous data_raw)
+  # on glisse ensuite le fichier excel sur la carte dans QGIS. On va dans la fenêtre de droite et on fait rechercher : on tape créer... et on choisit Créer une couche de points à partir d'une table
+  # Dans la fenêtre qui apparait chsoir les champs pour x et y et cliquer sur Exécuter
+  #  On verra apparaitre les 2 points en rouge.
+  # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
+  # la valeur du point apparait en bas à droit "Résultat de l'identification
+  valeur_attendu <- round(c(15.466656, 15.504798),5)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5])),5)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+# pas besoin de tester un climat annuel, car meme type de carte que climat 30 ans
+
+
