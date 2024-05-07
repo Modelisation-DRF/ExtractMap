@@ -17,7 +17,7 @@ Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel
 
 ## Documentation et références
 - Les cartes de propriétés de sol ont été téléchargées ici: https://www.donneesquebec.ca/recherche/dataset/siigsol-100m-carte-des-proprietes-du-sol, et ont été aggrégées aux 1000x1000m
-- Les IQS potentiels ont été téléchargés ici: https://www.foretouverte.gouv.qc.ca/
+- Les IQS potentiels ont été téléchargés ici: https://www.foretouverte.gouv.qc.ca/. La taille d'un pixel est de 1000m x 1000m
 - Les cartes de variables climatiques ont été créées avec le logiciel BioSIM (Régnière et al. 2017)
 
 ## Dépendences
