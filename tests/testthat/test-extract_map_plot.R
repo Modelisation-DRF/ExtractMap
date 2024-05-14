@@ -19,13 +19,19 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 
 })
 
-
 test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les climat normal 30 ans", {
 
-  variables <- c("aridity", "consecutivedayswithoutfrost")
+  #variables <- c("aridity", "consecutivedayswithoutfrost")
+  variables <- c("aridity", "consecutivedayswithoutfrost", "dayswithoutfrost", "degreeday",
+                  "firstfrostday", "growingseasonlength", "growingseasonprecipitation",
+                  "growingseasonradiation", "growingseasontmean", "julytmean",
+                  "lastfrostday", "pet", "snowfallproportion", "tmax", "tmean", "tmin",
+                  "totalprecipitation", "totalradiation", "totalsnowfall",
+                  "totalvpd", "utilprecipitation", "utilvpd")
   value <- extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables)
 
-  nom_obtenu <- names(value)[5:6]
+  #nom_obtenu <- names(value)[5:6]
+  nom_obtenu <- names(value)[5:26]
   expect_equal(nom_obtenu, variables)
 
 })
@@ -33,17 +39,17 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de climat incorrect", {
   liste_place <- fic_test
   variables <- c("aridity", "temperature")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables))
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables),"Nom des variables de climat demandées incorrect")
 })
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de sol incorrect", {
   liste_place <- fic_test
   variables <- c("cec", "clay")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=variables))
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=variables),"Nom des variables de sol demandées incorrect")
 })
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de IQS incorrect", {
   liste_place <- fic_test
   variables <- c("iqs_bop", "iqs_pot_sab")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=variables))
+  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=variables),"Nom des variables d'IQS demandées incorrect")
 })
 
 
@@ -61,7 +67,8 @@ test_that("La fonction extract_map_plot retourne la bonne valeur de climat norma
   # on glisse ensuite le fichier excel sur la carte dans QGIS. On verra apparaitre les 2 points en rouge.
   # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
   # la valeur du point apparait en bas à droit "Résultat de l'identification
-  valeur_attendu <- c(2.49900, 2.12072)
+  #valeur_attendu <- c(2.49900, 2.12072)
+  valeur_attendu <- c(2.5, 2.3) # aggrégé et arrondi à 1
   valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5])),5)
 
   expect_equal(valeur_obtenu, valeur_attendu)
@@ -88,9 +95,10 @@ test_that("La fonction extract_map_plot retourne la bonne valeur de sol", {
 
   # valeur_attendu <- c(1.814182, 1.148471) # valeurs dans la carte à resolution  100 x 100 m
   # valeur_attendu <- c(1.875036, 1.325892) # valeurs dans la carte à resolution  500 x 500 m
-  valeur_attendu <- c(1.728613, 1.375691) # valeurs dans la carte à resolution  1000 x 1000 m
+  #valeur_attendu <- c(1.728613, 1.375691) # valeurs dans la carte à resolution  1000 x 1000 m
+  valeur_attendu <- c(1.7, 1.4) # valeurs dans la carte à resolution  1000 x 1000 m et arrondi à 1
 
-  valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),6)
+  valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),1)
 
   expect_equal(valeur_obtenu, valeur_attendu)
 
@@ -113,8 +121,9 @@ test_that("La fonction extract_map_plot retourne la bonne valeur d'iqs", {
   #  On verra apparaitre les 2 points en rouge.
   # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
   # la valeur du point apparait en bas à droit "Résultat de l'identification
-  valeur_attendu <- round(c(15.466656, 15.504798),5)
-  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5])),5)
+  #valeur_attendu <- round(c(15.466656, 15.504798),5)
+  valeur_attendu <- c(15.5, 15.5) # arrondi à 1
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5])),1)
 
   expect_equal(valeur_obtenu, valeur_attendu)
 

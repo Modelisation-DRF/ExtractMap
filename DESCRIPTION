@@ -1,7 +1,7 @@
 Package: ExtractMap
 Type: Package
 Title: Extract values in maps from a set of coordinates
-Version: 1.1.2
+Version: 1.1.3
 Author: Isabelle Auger, isabelle.auger@mrnf.gouv.qc.ca
 Maintainer: Isabelle Auger <isabelle.auger@mrnf.gouv.qc.ca>
 Description: Functions to extract values in maps from a set of coordinates

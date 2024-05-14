@@ -12,14 +12,14 @@ test_that("La fonction extract_climat_an retourne les bons noms de colonnes pour
 test_that("La fonction extract_climat_an retourne une erreur si nom des variables de climat annuel incorrect", {
   liste_place <- fic_test
   variables <- c("growingseasonprecipitation", "temperature")
-  expect_error(extract_climat_an(file=liste_place, variable=variables))
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"Nom des variables de climat annuel demandées incorrect")
 })
 
 test_that("La fonction extract_climat_an retourne une erreur si periode>10", {
   liste_place <- fic_test
   periode=15
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode))
+  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"periode ne doit pas être supérieure à 10")
 })
 # test_that("La fonction extract_climat_an retourne une erreur an_mes-1 > 2024", {
 #   liste_place <- fic_test %>% mutate(an_mes=2026)
@@ -35,13 +35,13 @@ test_that("La fonction extract_climat_an retourne une erreur si periode>10", {
 test_that("La fonction extract_climat_an retourne une erreur an_mes > 2023", {
   liste_place <- fic_test %>% mutate(an_mes=2024)
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables))
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"an_mes ne doit pas être supérieure 2023")
 })
 test_that("La fonction extract_climat_an retourne une erreur an_mes-periode < 1980", {
   liste_place <- fic_test %>% mutate(an_mes=1985)
   periode=10
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode))
+  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"an_mes-periode ne doit pas être inférieure à 1980")
 })
 
 
@@ -63,12 +63,14 @@ test_that("La fonction extract_climat_an retourne le fichier attendu", {
   # la valeur du point apparait en bas à droit "Résultat de l'identification
   #valeur_attendu1 <- c(14.967177, 14.847577) # 2005
   #valeur_attendu2 <- c(14.701443, 14.126343) # 2006
-  valeur_attendu1 <- c(14.847577) # 2005
-  valeur_attendu2 <- c(14.126343) # 2006
+  #valeur_attendu1 <- c(14.847577) # 2005
+  #valeur_attendu2 <- c(14.126343) # 2006
+  valeur_attendu1 <- c(14.8) # 2005, arrondi
+  valeur_attendu2 <- c(14.1) # 2006, arrondi
 
    # faire la moyenne des annees
-  moy_attendu <- mean(rbind(valeur_attendu1,valeur_attendu2))
-  valeur_obtenu <-  round(as.numeric(value[1,5]),6)
+  moy_attendu <- round(mean(rbind(valeur_attendu1,valeur_attendu2)),2)
+  valeur_obtenu <-  round(as.numeric(value[1,5]),2)
 
   expect_equal(valeur_obtenu,moy_attendu)
 

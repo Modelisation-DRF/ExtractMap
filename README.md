@@ -18,7 +18,7 @@ Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel
 ## Documentation et références
 - Les cartes de propriétés de sol ont été téléchargées ici: https://www.donneesquebec.ca/recherche/dataset/siigsol-100m-carte-des-proprietes-du-sol, et ont été aggrégées aux 1000x1000m
 - Les IQS potentiels ont été téléchargés ici: https://www.foretouverte.gouv.qc.ca/. La taille d'un pixel est de 1000m x 1000m
-- Les cartes de variables climatiques ont été créées avec le logiciel BioSIM (Régnière et al. 2017)
+- Les cartes de variables climatiques ont été créées avec le logiciel BioSIM (Régnière et al. 2017) et ont été aggrégés environ aux 1000x1000m
 
 ## Dépendences
 Aucune dépendence à des packages externes à CRAN
@@ -54,7 +54,8 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
-| 2024-04-03 | 1.1.2 |  | création de nouveaux tif moins lourds |
+| 2024-05-14 | 1.1.3 |  | création de nouveaux tif moins lourds en arrondissant les valeurs |
+| 2024-04-03 | 1.1.2 |  | création de nouveaux tif moins lourds en aggrégeant et en diminuant l'extent |
 | 2024-03-26 | 1.1.1 |  | déplacer les package de depends à imports dans DESCRIPTION |
 | 2024-03-13 | 1.1.0 | issue #1  | ne fonctionne pas avec quand les cartes sont sauvegardées en objet spatial, les tif doivent être dans le package |
 | 2024-02-15 | 1.0.0 | | première version stable |
