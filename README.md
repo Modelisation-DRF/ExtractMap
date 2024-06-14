@@ -1,16 +1,12 @@
-## ExtractMap
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![R-CMD-check](https://github.com/Modelisation-DRF/RNatura2014/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Modelisation-DRF/RNatura2014/actions/workflows/R-CMD-check.yaml)
+
+## Le package ExtractMap
 
 Un package pour extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat à partir de fichiers tif
 
 Auteurs: Isabelle Auger - Ministère des Ressources Naturelles et des Forêts du Québec
 
 Courriel: isabelle.auger@mrnf.gouv.qc.ca
-
-This R package is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-
-This library is distributed with the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-See the license LGPL-3.0 at http://www.gnu.org/copyleft/lesser.html.
 
 ## Introduction
 Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat, en fournissant des coordonnées, à partir de fichiers tif fournis dans le package.
@@ -34,7 +30,7 @@ git clone https://github.com/Modelisation-DRF/ExtractMap extractmap
 
 ```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
 require(remotes)
-install_github("https://github.com/Modelisation-DRF/ExtractMap", ref="main", auth_token = "demander_un_token")
+remotes::install_github("Modelisation-DRF/ExtractMap")
 ```
 ## Exemple
 
