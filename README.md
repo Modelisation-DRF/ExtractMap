@@ -50,6 +50,7 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
+| 2024-07-23 | 1.2.0 |  | ajout profondeur 5-15cm cartes SIIGSOL, ne supprime plus lignes avec obs manquantes, ajout vérif si variable déjà dans fichier  |
 | 2024-05-14 | 1.1.3 |  | création de nouveaux tif moins lourds en arrondissant les valeurs |
 | 2024-04-03 | 1.1.2 |  | création de nouveaux tif moins lourds en aggrégeant et en diminuant l'extent |
 | 2024-03-26 | 1.1.1 |  | déplacer les package de depends à imports dans DESCRIPTION |

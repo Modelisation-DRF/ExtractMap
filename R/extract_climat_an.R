@@ -50,6 +50,7 @@ extract_climat_an <- function(file, variable, periode=10) {
 
   nom_climat_an <- c("growingseasonprecipitation","growingseasontmean")
   if (length(setdiff(variable, nom_climat_an))>0) {stop("Nom des variables de climat annuel demandées incorrect")}
+  if (sum(variable %in% names(file))>0) {stop("Variables demandées déjà présentes dans le fichier")}
 
   # il y a une seule couche
   couche =1

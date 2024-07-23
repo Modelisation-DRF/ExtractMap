@@ -34,7 +34,7 @@
 #' @param liste_raster Type de cartes:
 #' \itemize{
 #'   \item "cartes_iqs" : iqs pontentiels
-#'   \item "cartes_sol" : propriétés de sol SIIGOLS, profondeur 0-5 cm
+#'   \item "cartes_sol" : propriétés de sol SIIGSOL
 #'   \item "cartes_climat" : climats normales 30 ans
 #'   }
 #' @param variable Vecteur contenant le nom des variables à extraire, par exemple: c("tmean","totalprecipitation")
@@ -67,7 +67,11 @@
 #'   \item utilvpd
 #'   }
 #'   }
-#'
+#' @param profondeur Profondeur pour les propriétés de sols, utilisé seulement si liste_raster="cartes_sol", 1 par défaut
+#' \itemize{
+#'  \item 1: profondeur 0-5 cm
+#'  \item 2: pronfondeur 5-15 cm
+#' }
 #' @return  Table \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}
 #' @export
 #'
@@ -77,13 +81,14 @@
 #' iqs_values <- extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=c("iqs_pot_bop","iqs_pot_epn"))
 #' climat_values <- extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=c("tmean","totalprecipitation"))
 #' }
-extract_map_plot <- function(file, liste_raster, variable){
+extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
 
   # file=fic_test; liste_raster="cartes_iqs"; variable=c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex");
   # file=fic_test; liste_raster="cartes_sol"; variable=c("cec","ph","sable","argile","mat_org","limon");
   # file=fic_test; liste_raster="cartes_climat"; variable=c("totalprecipitation","tmean");
 
   # vérifier les noms demandés
+  nom_raster <- c("cartes_iqs", "cartes_sol", "cartes_climat")
   nom_climat <- c("aridity", "consecutivedayswithoutfrost", "dayswithoutfrost", "degreeday",
                   "firstfrostday", "growingseasonlength", "growingseasonprecipitation",
                   "growingseasonradiation", "growingseasontmean", "julytmean",
@@ -92,15 +97,23 @@ extract_map_plot <- function(file, liste_raster, variable){
                   "totalvpd", "utilprecipitation", "utilvpd")
   nom_sol <- c("cec","ph","mat_org","sable","limon","argile")
   nom_iqs <- c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex")
+  liste_prof <- c(1,2)
+
+  if (length(setdiff(liste_raster, nom_raster))>0) {stop("Nom du raster demandé incorrect")}
   if (liste_raster=="cartes_sol" & length(setdiff(variable, nom_sol))>0) {stop("Nom des variables de sol demandées incorrect")}
+  if (liste_raster=="cartes_sol" & length(setdiff(profondeur, liste_prof))>0) {stop("Profondeur des propriétés de sol demandée incorrecte")}
   if (liste_raster=="cartes_climat" & length(setdiff(variable, nom_climat))>0) {stop("Nom des variables de climat demandées incorrect")}
   if (liste_raster=="cartes_iqs" & length(setdiff(variable, nom_iqs))>0) {stop("Nom des variables d'IQS demandées incorrect")}
 
-  # il y a une seule couche
+  if (sum(variable %in% names(file))>0) {stop("Variables demandées déjà présentes dans le fichier")}
+
+
+  # il y a une seule couche dans chacun des rasters
   couche =1
 
   # lire les fichiers tif
-  if (liste_raster=="cartes_sol") repertoire = system.file("extdata/SIIGSOL_0_5cm/res_1000_x_1000m/", package = "ExtractMap")
+  if (liste_raster=="cartes_sol" & profondeur==1) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/0_5cm/", package = "ExtractMap")
+  if (liste_raster=="cartes_sol" & profondeur==2) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/05_15cm/", package = "ExtractMap")
   if (liste_raster=="cartes_climat") repertoire = system.file("extdata/CLIMAT/Cartes_climat_normales/", package = "ExtractMap")
   if (liste_raster=="cartes_iqs") repertoire = system.file("extdata/IQS_POT/", package = "ExtractMap")
 
@@ -134,9 +147,9 @@ extract_map_plot <- function(file, liste_raster, variable){
   extract_tous <- extract_tous %>% dplyr::select(-ID)
   names(extract_tous) <- tolower(names(extract_tous))
 
-  # ajouter les infos placettes et ne garder que les placettes qui n'ont pas de valeurs manquantes
+  # ajouter les infos placettes et ne garder que les placettes qui n'ont pas de valeurs manquantes: je vais garder les données manquantes
   liste_place <- as.data.frame(liste_place) %>% dplyr::select(id_pe)
-  extract_tous2 <- bind_cols(liste_place, extract_tous) %>% filter(complete.cases(.))
+  extract_tous2 <- bind_cols(liste_place, extract_tous) #%>% filter(complete.cases(.))
 
   # merger au fichier d'entree, pour aller chercher toutes les lignes s'il y avait plus d'une ligne par id_pe
   fic <- inner_join(file, extract_tous2, by='id_pe', multiple='all')

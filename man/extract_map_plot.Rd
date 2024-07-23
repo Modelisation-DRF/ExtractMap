@@ -4,7 +4,7 @@
 \alias{extract_map_plot}
 \title{Fonction pour effectuer des extractions à partir de raster et d'une liste de coordonnées}
 \usage{
-extract_map_plot(file, liste_raster, variable)
+extract_map_plot(file, liste_raster, variable, profondeur = 1)
 }
 \arguments{
 \item{file}{Table de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
@@ -17,7 +17,7 @@ extract_map_plot(file, liste_raster, variable)
 \item{liste_raster}{Type de cartes:
 \itemize{
   \item "cartes_iqs" : iqs pontentiels
-  \item "cartes_sol" : propriétés de sol SIIGOLS, profondeur 0-5 cm
+  \item "cartes_sol" : propriétés de sol SIIGSOL
   \item "cartes_climat" : climats normales 30 ans
   }}
 
@@ -51,6 +51,12 @@ extract_map_plot(file, liste_raster, variable)
   \item utilvpd
   }
   }}
+
+\item{profondeur}{Profondeur pour les propriétés de sols, utilisé seulement si liste_raster="cartes_sol", 1 par défaut
+\itemize{
+ \item 1: profondeur 0-5 cm
+ \item 2: pronfondeur 5-15 cm
+}}
 }
 \value{
 Table \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}

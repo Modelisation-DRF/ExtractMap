@@ -14,7 +14,13 @@ test_that("La fonction extract_climat_an retourne une erreur si nom des variable
   variables <- c("growingseasonprecipitation", "temperature")
   expect_error(extract_climat_an(file=liste_place, variable=variables),"Nom des variables de climat annuel demandées incorrect")
 })
+test_that("La fonction extract_climat_an retourne une erreur si la variable demandée est déjà dans le fichier", {
+  liste_place <- fic_test
+  liste_place$growingseasonprecipitation <- 200
+  variables <- c("growingseasonprecipitation", "growingseasontmean")
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"Variables demandées déjà présentes dans le fichier")
 
+})
 test_that("La fonction extract_climat_an retourne une erreur si periode>10", {
   liste_place <- fic_test
   periode=15

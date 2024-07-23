@@ -39,19 +39,36 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de climat incorrect", {
   liste_place <- fic_test
   variables <- c("aridity", "temperature")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=variables),"Nom des variables de climat demandées incorrect")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_climat", variable=variables),"Nom des variables de climat demandées incorrect")
 })
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de sol incorrect", {
   liste_place <- fic_test
   variables <- c("cec", "clay")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=variables),"Nom des variables de sol demandées incorrect")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_sol", variable=variables),"Nom des variables de sol demandées incorrect")
 })
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de IQS incorrect", {
   liste_place <- fic_test
   variables <- c("iqs_bop", "iqs_pot_sab")
-  expect_error(extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=variables),"Nom des variables d'IQS demandées incorrect")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_iqs", variable=variables),"Nom des variables d'IQS demandées incorrect")
+})
+test_that("La fonction extract_map_plot retourne une erreur si profondeur incorrecte", {
+  liste_place <- fic_test
+  variables <- c("cec", "argile")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_sol", variable=variables, profondeur = 3),"Profondeur des propriétés de sol demandée incorrecte")
+})
+test_that("La fonction extract_map_plot retourne une erreur si nom du raster_incorrect", {
+  liste_place <- fic_test
+  variables <- c("cec", "argile")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes", variable=variables),"Nom du raster demandé incorrect")
 })
 
+test_that("La fonction extract_map_plot retourne une erreur si la variable demandée est déjà dans le fichier", {
+  liste_place <- fic_test
+  liste_place$cec <- 0.5
+  variables <- c("cec","sable")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_sol", variable=variables),"Variables demandées déjà présentes dans le fichier")
+
+})
 
 test_that("La fonction extract_map_plot retourne la bonne valeur de climat normal 30 ans", {
 
@@ -129,6 +146,24 @@ test_that("La fonction extract_map_plot retourne la bonne valeur d'iqs", {
 
 })
 
-# pas besoin de tester un climat annuel, car meme type de carte que climat 30 ans
+
+test_that("La fonction extract_map_plot fonctionne avec la profondeur 2 pour les cartes de sol", {
+  liste_place <- fic_test
+  variables <- c("cec", "ph", "mat_org", "argile", "limon", "sable")
+  expect_no_error(extract_map_plot(file=liste_place, liste_raster="cartes_sol", variable=variables, profondeur = 2))
+})
+
+
+test_that("La fonction extract_map_plot fonctionne tel qu'attendu avec une extraction de données manquantes", {
+  liste_place <- fic_test
+  ajout <- data.frame(id_pe='test', latitude=19.3, longitude=-70.5, an_mes=2020)
+  liste_place2 <- bind_rows(liste_place, ajout)
+  variables <- c("cec")
+  res = extract_map_plot(file=liste_place2, liste_raster="cartes_sol", variable=variables, profondeur = 2)
+  res_obt = res %>% filter(id_pe=='test')
+  expect_equal(res_obt$cec,NaN)
+})
+
+
 
 
