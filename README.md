@@ -2,19 +2,20 @@
 
 ## Le package ExtractMap
 
-Un package pour extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat à partir de fichiers tif
+Un package pour extraire des valeurs de propriétés de sol, d'IQS potentiel, de station et de climat à partir de fichiers tif
 
 Auteurs: Isabelle Auger - Ministère des Ressources Naturelles et des Forêts du Québec
 
 Courriel: isabelle.auger@mrnf.gouv.qc.ca
 
 ## Introduction
-Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel et de climat, en fournissant des coordonnées, à partir de fichiers tif fournis dans le package.
+Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel, de station et de climat, en fournissant des coordonnées, à partir de fichiers tif fournis dans le package.
 
 ## Documentation et références
 - Les cartes de propriétés de sol ont été téléchargées ici: https://www.donneesquebec.ca/recherche/dataset/siigsol-100m-carte-des-proprietes-du-sol, et ont été aggrégées aux 1000x1000m
 - Les IQS potentiels ont été téléchargés ici: https://www.foretouverte.gouv.qc.ca/. La taille d'un pixel est de 1000m x 1000m
 - Les cartes de variables climatiques ont été créées avec le logiciel BioSIM (Régnière et al. 2017) et ont été aggrégés environ aux 1000x1000m
+- Les cartes de station (pente et exposition) ont été créées par Jean Noël, à partir de la carte d'altitude de la DIF.
 
 ## Dépendences
 Aucune dépendence à des packages externes à CRAN
@@ -50,6 +51,7 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
+| 2024-08-19 | 1.3.0 |  | ajout cartes de station avec pente et exposition |
 | 2024-07-23 | 1.2.0 |  | ajout profondeur 5-15cm cartes SIIGSOL, ne supprime plus lignes avec obs manquantes, ajout vérif si variable déjà dans fichier  |
 | 2024-05-14 | 1.1.3 |  | création de nouveaux tif moins lourds en arrondissant les valeurs |
 | 2024-04-03 | 1.1.2 |  | création de nouveaux tif moins lourds en aggrégeant et en diminuant l'extent |

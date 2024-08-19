@@ -19,12 +19,14 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
   \item "cartes_iqs" : iqs pontentiels
   \item "cartes_sol" : propriétés de sol SIIGSOL
   \item "cartes_climat" : climats normales 30 ans
+  \item "cartes_station" : variables de station (pente, exposition, etc.)
   }}
 
 \item{variable}{Vecteur contenant le nom des variables à extraire, par exemple: c("tmean","totalprecipitation")
 \itemize{
   \item cartes_iqs: iqs_pot_bop, iqs_pot_pex, iqs_pot_epb, iqs_pot_epn, iqs_pot_epr, iqs_pot_pig, iqs_pot_pib, iqs_pot_tho, iqs_pot_sab
   \item cartes_sol : cec, mat_org, ph, sable, limon, argile
+  \item cartes_station : pente, exposition
   \item cartes_climat :
     \itemize{
   \item aridity
@@ -66,11 +68,13 @@ Extrait des valeurs à partir de raster et d'une liste de coordonnées
 }
 \details{
 Il y a un raster par variable. Les rasters sont dans des fichiers tif dans le package.
+Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels de 1 km2. Les cartes de station ont des pixels de 500 m2.
 }
 \examples{
 \dontrun{
 soil_values <- extract_map_plot(file=fic_test, liste_raster="cartes_sol", variable=c("cec","mat_org"))
 iqs_values <- extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=c("iqs_pot_bop","iqs_pot_epn"))
 climat_values <- extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=c("tmean","totalprecipitation"))
+station_values <- extract_map_plot(file=fic_test, liste_raster="cartes_station", variable=c("pente","exposition"))
 }
 }

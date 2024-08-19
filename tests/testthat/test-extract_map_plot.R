@@ -19,6 +19,16 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 
 })
 
+test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les variables de station", {
+
+  variables <- c("pente","exposition")
+  value <- extract_map_plot(file=fic_test, liste_raster="cartes_station", variable=variables)
+
+  nom_obtenu <- names(value)[5:6]
+  expect_equal(nom_obtenu, variables)
+
+})
+
 test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les climat normal 30 ans", {
 
   #variables <- c("aridity", "consecutivedayswithoutfrost")
@@ -50,6 +60,11 @@ test_that("La fonction extract_map_plot retourne une erreur si nom des variables
   liste_place <- fic_test
   variables <- c("iqs_bop", "iqs_pot_sab")
   expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_iqs", variable=variables),"Nom des variables d'IQS demandées incorrect")
+})
+test_that("La fonction extract_map_plot retourne une erreur si nom des variables de station incorrect", {
+  liste_place <- fic_test
+  variables <- c("pente", "expo")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_station", variable=variables),"Nom des variables de station demandées incorrect")
 })
 test_that("La fonction extract_map_plot retourne une erreur si profondeur incorrecte", {
   liste_place <- fic_test
@@ -114,6 +129,22 @@ test_that("La fonction extract_map_plot retourne la bonne valeur de sol", {
   # valeur_attendu <- c(1.875036, 1.325892) # valeurs dans la carte à resolution  500 x 500 m
   #valeur_attendu <- c(1.728613, 1.375691) # valeurs dans la carte à resolution  1000 x 1000 m
   valeur_attendu <- c(1.7, 1.4) # valeurs dans la carte à resolution  1000 x 1000 m et arrondi à 1
+
+  valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),1)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+test_that("La fonction extract_map_plot retourne la bonne valeur de station", {
+
+  carte <- "cartes_station"
+  variable = c("pente")
+  liste_place <- fic_test
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c(14, 8) # valeurs dans la carte à resolution  500 x 500 m et arrondi à l'unite
 
   valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),1)
 
