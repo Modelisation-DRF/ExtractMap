@@ -46,11 +46,11 @@ extract_climat_an <- function(file, variable, periode=10) {
   # periode=2; file = fic_test %>% mutate(an_mes=2025) %>% filter(id_pe=='0700200501_N_1970'); variable = "growingseasontmean";
   # file=fic_test; variable=c("growingseasonprecipitation","growingseasontmean");  periode=10
 
-  if (periode > 10 ) {stop("periode ne doit pas être supérieure à 10")}
+  if (periode > 10 ) {stop("periode ne doit pas etre superieure a 10")}
 
   nom_climat_an <- c("growingseasonprecipitation","growingseasontmean")
-  if (length(setdiff(variable, nom_climat_an))>0) {stop("Nom des variables de climat annuel demandées incorrect")}
-  if (sum(variable %in% names(file))>0) {stop("Variables demandées déjà présentes dans le fichier")}
+  if (length(setdiff(variable, nom_climat_an))>0) {stop("Nom des variables de climat annuel demandees incorrect")}
+  if (sum(variable %in% names(file))>0) {stop("Variables demandees deja presentes dans le fichier")}
 
   # il y a une seule couche
   couche =1
@@ -61,8 +61,8 @@ extract_climat_an <- function(file, variable, periode=10) {
   an_min <- min(liste_place$an_mes)-periode
   an_max <- max(liste_place$an_mes)-1
 
-  if (an_min < 1980) {stop("an_mes-periode ne doit pas être inférieure à 1980")}
-  if (an_max > 2022 ) {stop("an_mes ne doit pas être supérieure 2023")}
+  if (an_min < 1980) {stop("an_mes-periode ne doit pas etre inferieure a 1980")}
+  if (an_max > 2022 ) {stop("an_mes ne doit pas etre superieure a 2023")}
 
   # je ne ferai pas ça pour l'instant
   # if (an_min < 1970) {stop("an_mes-periode ne doit pas être inférieur à 1970")} # je tolère max de 10 ans en bas de 1980
@@ -87,11 +87,15 @@ extract_climat_an <- function(file, variable, periode=10) {
     }
   }
   # lire les fichiers tif
-  repertoire = system.file("extdata/CLIMAT/Cartes_climat_annuel/", package = "ExtractMap")
+  repertoire = system.file("extdata/CLIMAT/Cartes_climat_annuel", package = "ExtractMap")
+  # verifier si le dernier / est present ou non
+  last_char <- str_sub(repertoire, -1, -1)
+  if (last_char != '/') {repertoire <- paste0(repertoire,'/')}
+
   cartes <- list()
   for (i in 1:length(variable_tous))
   { # i=1
-    cartes[[i]] <- terra::rast(paste0(repertoire,"/",variable_tous[[i]],".tif"))
+    cartes[[i]] <- terra::rast(paste0(repertoire, variable_tous[[i]],".tif"))
   }
   names(cartes) <- gsub(".tif","",variable_tous) # enlever le .tif du nom
   names(cartes) <- tolower(gsub("RF","", names(cartes))) # enlever le RF au début et mettre en minuscule

@@ -108,30 +108,34 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
   nom_station <- c("pente","exposition")
   liste_prof <- c(1,2)
 
-  if (length(setdiff(liste_raster, nom_raster))>0) {stop("Nom du raster demandé incorrect")}
-  if (liste_raster=="cartes_sol" & length(setdiff(variable, nom_sol))>0) {stop("Nom des variables de sol demandées incorrect")}
-  if (liste_raster=="cartes_sol" & length(setdiff(profondeur, liste_prof))>0) {stop("Profondeur des propriétés de sol demandée incorrecte")}
-  if (liste_raster=="cartes_climat" & length(setdiff(variable, nom_climat))>0) {stop("Nom des variables de climat demandées incorrect")}
-  if (liste_raster=="cartes_iqs" & length(setdiff(variable, nom_iqs))>0) {stop("Nom des variables d'IQS demandées incorrect")}
-  if (liste_raster=="cartes_station" & length(setdiff(variable, nom_station))>0) {stop("Nom des variables de station demandées incorrect")}
+  if (length(setdiff(liste_raster, nom_raster))>0) {stop("Nom du raster demande incorrect")}
+  if (liste_raster=="cartes_sol" & length(setdiff(variable, nom_sol))>0) {stop("Nom des variables de sol demandees incorrect")}
+  if (liste_raster=="cartes_sol" & length(setdiff(profondeur, liste_prof))>0) {stop("Profondeur des proprietes de sol demandee incorrecte")}
+  if (liste_raster=="cartes_climat" & length(setdiff(variable, nom_climat))>0) {stop("Nom des variables de climat demandees incorrect")}
+  if (liste_raster=="cartes_iqs" & length(setdiff(variable, nom_iqs))>0) {stop("Nom des variables d'IQS demandees incorrect")}
+  if (liste_raster=="cartes_station" & length(setdiff(variable, nom_station))>0) {stop("Nom des variables de station demandees incorrect")}
 
-  if (sum(variable %in% names(file))>0) {stop("Variables demandées déjà présentes dans le fichier")}
+  if (sum(variable %in% names(file))>0) {stop("Variables demandees deja presentes dans le fichier")}
 
 
   # il y a une seule couche dans chacun des rasters
   couche =1
 
   # lire les fichiers tif
-  if (liste_raster=="cartes_sol" & profondeur==1) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/0_5cm/", package = "ExtractMap")
-  if (liste_raster=="cartes_sol" & profondeur==2) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/05_15cm/", package = "ExtractMap")
-  if (liste_raster=="cartes_climat") repertoire = system.file("extdata/CLIMAT/Cartes_climat_normales/", package = "ExtractMap")
-  if (liste_raster=="cartes_iqs") repertoire = system.file("extdata/IQS_POT/", package = "ExtractMap")
-  if (liste_raster=="cartes_station") repertoire = system.file("extdata/STATION/", package = "ExtractMap")
+  if (liste_raster=="cartes_sol" & profondeur==1) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/0_5cm", package = "ExtractMap")
+  if (liste_raster=="cartes_sol" & profondeur==2) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/05_15cm", package = "ExtractMap")
+  if (liste_raster=="cartes_climat") repertoire = system.file("extdata/CLIMAT/Cartes_climat_normales", package = "ExtractMap")
+  if (liste_raster=="cartes_iqs") repertoire = system.file("extdata/IQS_POT", package = "ExtractMap")
+  if (liste_raster=="cartes_station") repertoire = system.file("extdata/STATION", package = "ExtractMap")
+
+  # verifier si le dernier / est present ou non
+  last_char <- str_sub(repertoire, -1, -1)
+  if (last_char != '/') {repertoire <- paste0(repertoire,'/')}
 
   cartes <- list()
   for (i in 1:length(variable))
   { # i=1
-    cartes[[i]] <- terra::rast(paste0(repertoire,"/",variable[[i]],".tif"))
+    cartes[[i]] <- terra::rast(paste0(repertoire, variable[[i]],".tif"))
   }
   names(cartes) <- tolower(variable)
   #plot(cartes[[1]])

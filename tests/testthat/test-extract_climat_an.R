@@ -12,20 +12,20 @@ test_that("La fonction extract_climat_an retourne les bons noms de colonnes pour
 test_that("La fonction extract_climat_an retourne une erreur si nom des variables de climat annuel incorrect", {
   liste_place <- fic_test
   variables <- c("growingseasonprecipitation", "temperature")
-  expect_error(extract_climat_an(file=liste_place, variable=variables),"Nom des variables de climat annuel demandées incorrect")
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"Nom des variables de climat annuel demandees incorrect")
 })
 test_that("La fonction extract_climat_an retourne une erreur si la variable demandée est déjà dans le fichier", {
   liste_place <- fic_test
   liste_place$growingseasonprecipitation <- 200
   variables <- c("growingseasonprecipitation", "growingseasontmean")
-  expect_error(extract_climat_an(file=liste_place, variable=variables),"Variables demandées déjà présentes dans le fichier")
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"Variables demandees deja presentes dans le fichier")
 
 })
 test_that("La fonction extract_climat_an retourne une erreur si periode>10", {
   liste_place <- fic_test
   periode=15
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"periode ne doit pas être supérieure à 10")
+  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"periode ne doit pas etre superieure a 10")
 })
 # test_that("La fonction extract_climat_an retourne une erreur an_mes-1 > 2024", {
 #   liste_place <- fic_test %>% mutate(an_mes=2026)
@@ -41,13 +41,13 @@ test_that("La fonction extract_climat_an retourne une erreur si periode>10", {
 test_that("La fonction extract_climat_an retourne une erreur an_mes > 2023", {
   liste_place <- fic_test %>% mutate(an_mes=2024)
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables),"an_mes ne doit pas être supérieure 2023")
+  expect_error(extract_climat_an(file=liste_place, variable=variables),"an_mes ne doit pas etre superieure a 2023")
 })
 test_that("La fonction extract_climat_an retourne une erreur an_mes-periode < 1980", {
   liste_place <- fic_test %>% mutate(an_mes=1985)
   periode=10
   variables <- c("growingseasonprecipitation")
-  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"an_mes-periode ne doit pas être inférieure à 1980")
+  expect_error(extract_climat_an(file=liste_place, variable=variables, periode=periode),"an_mes-periode ne doit pas etre inferieure a 1980")
 })
 
 
