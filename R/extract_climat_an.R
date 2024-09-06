@@ -52,6 +52,10 @@ extract_climat_an <- function(file, variable, periode=10) {
   if (length(setdiff(variable, nom_climat_an))>0) {stop("Nom des variables de climat annuel demandees incorrect")}
   if (sum(variable %in% names(file))>0) {stop("Variables demandees deja presentes dans le fichier")}
 
+  # mettre des majuscules aux bonnes places dans les noms de variables, pour aller lire le fichiers tif
+  variable <- gsub("growingseasonprecipitation", "GrowingSeasonPrecipitation", variable)
+  variable <- gsub("growingseasontmean", "GrowingSeasonTmean", variable)
+
   # il y a une seule couche
   couche =1
 
