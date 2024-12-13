@@ -9,6 +9,17 @@ test_that("La fonction extract_climat_an retourne les bons noms de colonnes pour
 
 })
 
+
+test_that("La fonction extract_climat_an fonctionne tel qu'attendu avec une extraction de données manquante", {
+  liste_place <- fic_test
+  ajout <- data.frame(id_pe='test', latitude=19.3, longitude=-70.5, an_mes=2020)
+  liste_place2 <- bind_rows(liste_place, ajout)
+  variables <- c("growingseasonprecipitation")
+  res = extract_climat_an(file=liste_place2, variable=variables)
+  res_obt = res %>% filter(id_pe=='test')
+  expect_equal(res_obt$growingseasonprecipitation,NaN)
+})
+
 test_that("La fonction extract_climat_an retourne une erreur si nom des variables de climat annuel incorrect", {
   liste_place <- fic_test
   variables <- c("growingseasonprecipitation", "temperature")

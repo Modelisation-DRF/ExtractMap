@@ -51,6 +51,7 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
+| 2024-12-11 | 1.3.1 |  | ne supprime plus lignes avec obs manquantes dans la fct extract_climat_an |
 | 2024-08-19 | 1.3.0 |  | ajout cartes de station avec pente et exposition |
 | 2024-07-23 | 1.2.0 |  | ajout profondeur 5-15cm cartes SIIGSOL, ne supprime plus lignes avec obs manquantes, ajout vérif si variable déjà dans fichier  |
 | 2024-05-14 | 1.1.3 |  | création de nouveaux tif moins lourds en arrondissant les valeurs |

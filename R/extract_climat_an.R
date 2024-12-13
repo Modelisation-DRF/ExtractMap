@@ -143,8 +143,8 @@ extract_climat_an <- function(file, variable, periode=10) {
     pivot_wider(names_from = "nom", values_from = "moy") %>%
     ungroup()
 
-  # ne garder que les placettes qui ont des valeurs de climat partout
-  clim_plot3 <- clim_plot2 %>% filter(complete.cases(.))
+  # ne garder que les placettes qui ont des valeurs de climat partout: je vais tout garder finalement
+  clim_plot3 <- clim_plot2 # %>% filter(complete.cases(.))
 
   # merger au fichier d'entree pour rajouter les lignes s'il y avait plus d'une lignes par placette
   fic <- inner_join(file, clim_plot3, by='id_pe', multiple='all')

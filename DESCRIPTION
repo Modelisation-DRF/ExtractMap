@@ -1,7 +1,7 @@
 Package: ExtractMap
 Type: Package
 Title: Extract values in maps from a set of coordinates
-Version: 1.3.0
+Version: 1.3.1
 Authors@R: c(
     person("Isabelle", "Auger", email = "isabelle.auger@mrnf.gouv.qc.ca", role = c("aut", "cre")))
 Description: Functions to extract values in maps from a set of coordinates.

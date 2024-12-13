@@ -198,3 +198,81 @@ test_that("La fonction extract_map_plot fonctionne tel qu'attendu avec une extra
 
 
 
+test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour le sol", {
+
+  carte <- "cartes_sol"
+  variable = "cec" # 0-5cm
+  liste_place <- fic_test
+  liste_place$latitude <- 50.2
+  liste_place$longitude <- -66.5
+  liste_place$id_pe <- c('A','B')
+  liste_place <- bind_rows(fic_test, liste_place)
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c(1.7, 1.4, NaN, NaN)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5], value1[3,5], value1[4,5])),1)
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour le climat", {
+
+  carte <- "cartes_climat"
+  variable = "tmean"
+  liste_place <- fic_test
+  liste_place$latitude <- 50.2
+  liste_place$longitude <- -66.5
+  liste_place$id_pe <- c('A','B')
+  liste_place <- bind_rows(fic_test, liste_place)
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c(2.5, 2.3, NaN, NaN)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5], value1[3,5], value1[3,5])),1)
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour station", {
+
+  carte <- "cartes_station"
+  variable = c("pente")
+  liste_place <- fic_test
+  liste_place$latitude <- 49
+  liste_place$longitude <- -68
+  liste_place$id_pe <- c('A','B')
+  liste_place <- bind_rows(fic_test, liste_place)
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c(14, 8, NaN, NaN)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5], value1[3,5], value1[4,5])), 1)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour iqs", {
+
+  carte <- "cartes_iqs"
+  variable = c("iqs_pot_epn")
+  liste_place <- fic_test
+  #liste_place$latitude <- 50.2
+  #liste_place$longitude <- -66.5
+  liste_place$latitude <- 49
+  liste_place$longitude <- -68
+  liste_place$id_pe <- c('A','B')
+  liste_place <- bind_rows(fic_test, liste_place)
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c(15.8, 15.6, NA, NA)
+  valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5], value1[3,5], value1[4,5])), digits=1)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+
+})
+
+
