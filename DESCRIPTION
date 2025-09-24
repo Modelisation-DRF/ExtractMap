@@ -1,7 +1,7 @@
 Package: ExtractMap
 Type: Package
 Title: Extract values in maps from a set of coordinates
-Version: 1.3.1
+Version: 1.3.2
 Authors@R: c(
     person("Isabelle", "Auger", email = "isabelle.auger@mrnf.gouv.qc.ca", role = c("aut", "cre")))
 Description: Functions to extract values in maps from a set of coordinates.
@@ -10,10 +10,13 @@ License: LGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    dplyr,
+    stringr,
+    terra,
+    magrittr,
     sf,
-	terra
+    tidyr
 Depends: 
-	tidyverse,
     R (>= 4.2)
 RoxygenNote: 7.3.2
 Suggests: 
