@@ -7,7 +7,7 @@
 extract_climat_an(file, variable, periode = 10)
 }
 \arguments{
-\item{file}{Table de 4 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
+\item{file}{Data frame de 4 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
 \itemize{
  \item id_pe: identifiant du point
  \item latitude: latitude du point en degrés décimales (4326)
@@ -30,7 +30,7 @@ Table \code{file} avec les colonnes supplémentaires spécifiées dans \code{var
 Extrait à partir de cartes de climat sous forme de raster et d'une liste de coordonnées, des variables de climat annuel et calcule la moyenne sur x années, pour les x années avant l'année spécifiée.
 }
 \details{
-Il y a un raster par variable par année, de 1980 à 2022. Les rasters sont dans des fichiers tif dans le package.
+Il y a un raster multicouches par variable, couches de 1980 à 2022. Les rasters sont dans des fichiers tif dans le package.
 Conditions: an_mes - periode >= 1980 et an_mes<=2023
 }
 \examples{

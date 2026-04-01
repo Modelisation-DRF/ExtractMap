@@ -24,9 +24,10 @@
 #'
 #' @details
 #' Il y a un raster par variable. Les rasters sont dans des fichiers tif dans le package.
-#' Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels de 1 km2. Les cartes de station ont des pixels de 500 m2.
+#' Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels d'environ 1 km2.
+#' Les cartes de station ont des pixels de 500 m2.
 
-#' @param file Table de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
+#' @param file Data frame de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
 #' \itemize{
 #'  \item id_pe: identifiant du point
 #'  \item latitude: latitude du point en degrés décimales (4326)
@@ -43,7 +44,7 @@
 #' \itemize{
 #'   \item cartes_iqs: iqs_pot_bop, iqs_pot_pex, iqs_pot_epb, iqs_pot_epn, iqs_pot_epr, iqs_pot_pig, iqs_pot_pib, iqs_pot_tho, iqs_pot_sab
 #'   \item cartes_sol : cec, mat_org, ph, sable, limon, argile
-#'   \item cartes_station : pente, exposition
+#'   \item cartes_station : pente, exposition, depot
 #'   \item cartes_climat :
 #'     \itemize{
 #'   \item aridity
@@ -75,7 +76,7 @@
 #'  \item 1: profondeur 0-5 cm
 #'  \item 2: pronfondeur 5-15 cm
 #' }
-#' @return  Table \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}
+#' @return  Data frame \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}
 #'
 #'
 #' @export
@@ -90,9 +91,9 @@
 extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
 
   # file=fic_test; liste_raster="cartes_iqs"; variable=c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex");
-  # file=fic_test; liste_raster="cartes_sol"; variable=c("cec","ph","sable","argile","mat_org","limon");
+  # file=fic_test; liste_raster="cartes_sol"; variable=c("cec","ph","sable","argile","mat_org","limon"); profondeur=2;
   # file=fic_test; liste_raster="cartes_climat"; variable=c("totalprecipitation","tmean");
-  # file=fic_test; liste_raster="cartes_station"; variable=c("pente","exposition");
+  # file=fic_test; liste_raster="cartes_station"; variable=c("pente","exposition","depot");
 
   # vérifier les noms demandés
   nom_raster <- c("cartes_iqs", "cartes_sol", "cartes_climat", "cartes_station")
@@ -105,7 +106,7 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
                   "totalvpd", "utilprecipitation", "utilvpd")
   nom_sol <- c("cec","ph","mat_org","sable","limon","argile")
   nom_iqs <- c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex")
-  nom_station <- c("pente","exposition")
+  nom_station <- c("pente","exposition","depot")
   liste_prof <- c(1,2)
 
   if (length(setdiff(liste_raster, nom_raster))>0) {stop("Nom du raster demande incorrect")}
@@ -118,29 +119,39 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
   if (sum(variable %in% names(file))>0) {stop("Variables demandees deja presentes dans le fichier")}
 
 
-  # il y a une seule couche dans chacun des rasters
-  couche =1
-
-  # lire les fichiers tif
-  if (liste_raster=="cartes_sol" & profondeur==1) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/0_5cm", package = "ExtractMap")
-  if (liste_raster=="cartes_sol" & profondeur==2) repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m/05_15cm", package = "ExtractMap")
+  # Attribuer le nom du répertoire des fichiers tif
+  if (liste_raster=="cartes_sol") repertoire = system.file("extdata/SIIGSOL/res_1000_x_1000m", package = "ExtractMap")
   if (liste_raster=="cartes_climat") repertoire = system.file("extdata/CLIMAT/Cartes_climat_normales", package = "ExtractMap")
   if (liste_raster=="cartes_iqs") repertoire = system.file("extdata/IQS_POT", package = "ExtractMap")
   if (liste_raster=="cartes_station") repertoire = system.file("extdata/STATION", package = "ExtractMap")
+
+  # Nom des fichiers tif
+  if (liste_raster=="cartes_sol") fichier = "siigsol"
+  if (liste_raster=="cartes_climat") fichier = "Climat_normale_30ans"
+  if (liste_raster=="cartes_iqs") fichier = "iqs_potentiel"
+
 
   # verifier si le dernier / est present ou non
   last_char <- str_sub(repertoire, -1, -1)
   if (last_char != '/') {repertoire <- paste0(repertoire,'/')}
 
-  cartes <- list()
-  for (i in 1:length(variable))
-  { # i=1
-    cartes[[i]] <- terra::rast(paste0(repertoire, variable[[i]],".tif"))
+  # Lire le raster
+  if (liste_raster %in% c("cartes_iqs","cartes_climat","cartes_sol")) cartes <- terra::rast(paste0(repertoire, fichier,".tif"))
+  if (liste_raster=="cartes_station") {
+    pente <- terra::rast(paste0(repertoire, "/pente.tif"))
+    expo <- terra::rast(paste0(repertoire, "/exposition.tif"))
+    depot <- terra::vect(paste0(repertoire, "/depot.gpkg"))
+    cartes <- list(pente, expo, depot) # ne peuvent pas être dans un raster multicouche car pas le même CRS
+    names(cartes) <- c('pente','exposition','depot')
   }
-  names(cartes) <- tolower(variable)
-  #plot(cartes[[1]])
-  #max(cartes[[9]])
-  #min(cartes[[1]])
+
+  # Si variables de sol, ajouter la profondeur au bout du nom de la variable
+  if (liste_raster=="cartes_sol") {
+    prof <- '0-5'
+    var <- variable
+    if (profondeur==2) prof <- '5-15'
+    variable <- paste(variable, prof, sep='_')
+  }
 
   # faire une liste des coord à extraire
   liste_place <- file %>% dplyr::select(id_pe, latitude, longitude) %>%  unique()
@@ -150,18 +161,15 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
   pet_pe <- sf::st_as_sf(liste_place, coords = c("longitude", "latitude")) # convert un table into an sf object
   sf::st_crs(pet_pe) <- 4326  # set coordinate reference system to an object, decimal degrees
   tous_pe <- sf::st_transform(pet_pe, crs = proj_carte) # convert coordinates
+  tous_pe <- terra::vect(tous_pe)
 
   extract_tous <- NULL
   for(x in 1:length(variable)){
-     # x=1
-     fic_temp <- as.data.frame(terra::extract(cartes[[x]][[couche]], tous_pe))
-     if (liste_raster=="cartes_sol") {names(fic_temp)[2] <- variable[x]} # si carte de sol, il faut changer le nom, car c'est le nom de la profondeur et non celui de l'élément
-     if (liste_raster=="cartes_station") {names(fic_temp)[2] <- variable[x]}
-     if (x==1) extract_tous <- fic_temp
-     if (x>1) extract_tous <- left_join(extract_tous, fic_temp, by='ID')
+     # x=3
+     fic_temp <- data.frame(terra::extract(cartes[[variable[[x]]]], tous_pe))
+     if (liste_raster=="cartes_sol") {names(fic_temp)[2] <- var[[x]]} # si carte de sol, il faut changer le nom pour enlever la profondeur
+     extract_tous <- bind_cols(extract_tous, fic_temp[,2, drop = FALSE])
   }
-  extract_tous <- extract_tous %>% dplyr::select(-ID)
-  names(extract_tous) <- tolower(names(extract_tous))
 
   # ajouter les infos placettes et ne garder que les placettes qui n'ont pas de valeurs manquantes: je vais garder les données manquantes
   liste_place <- as.data.frame(liste_place) %>% dplyr::select(id_pe)

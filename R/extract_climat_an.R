@@ -15,10 +15,10 @@
 #' @description Extrait à partir de cartes de climat sous forme de raster et d'une liste de coordonnées, des variables de climat annuel et calcule la moyenne sur x années, pour les x années avant l'année spécifiée.
 #'
 #' @details
-#' Il y a un raster par variable par année, de 1980 à 2022. Les rasters sont dans des fichiers tif dans le package.
+#' Il y a un raster multicouches par variable, couches de 1980 à 2022. Les rasters sont dans des fichiers tif dans le package.
 #' Conditions: an_mes - periode >= 1980 et an_mes<=2023
 #'
-#' @param file Table de 4 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
+#' @param file Data frame de 4 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
 #' \itemize{
 #'  \item id_pe: identifiant du point
 #'  \item latitude: latitude du point en degrés décimales (4326)
@@ -57,7 +57,7 @@ extract_climat_an <- function(file, variable, periode=10) {
   variable <- gsub("growingseasontmean", "GrowingSeasonTmean", variable)
 
   # il y a une seule couche
-  couche =1
+  #couche =1
 
   liste_place <- file %>% dplyr::select(id_pe, latitude, longitude, an_mes) %>%  unique()
 
@@ -92,18 +92,15 @@ extract_climat_an <- function(file, variable, periode=10) {
   }
   # lire les fichiers tif
   repertoire = system.file("extdata/CLIMAT/Cartes_climat_annuel", package = "ExtractMap")
+
   # verifier si le dernier / est present ou non
   last_char <- str_sub(repertoire, -1, -1)
   if (last_char != '/') {repertoire <- paste0(repertoire,'/')}
 
-  cartes <- list()
-  for (i in 1:length(variable_tous))
-  { # i=1
-    cartes[[i]] <- terra::rast(paste0(repertoire, variable_tous[[i]],".tif"))
-  }
-  names(cartes) <- gsub(".tif","",variable_tous) # enlever le .tif du nom
-  names(cartes) <- tolower(gsub("RF","", names(cartes))) # enlever le RF au début et mettre en minuscule
-  #plot(cartes[[1]])
+  cartes_prec <- terra::rast(paste0(repertoire, "GrowingSeasonPrecipitation_annual.tif"))
+  cartes_temp <- terra::rast(paste0(repertoire, "GrowingSeasonTmean_annual.tif"))
+  # mettre les 2 cartes ensemble
+  cartes <- c(cartes_prec,cartes_temp)
 
   # transform the coordinates in the same projection as the maps
   proj_carte <- sf::st_crs(cartes[[1]]) # extract projection from a map
@@ -114,11 +111,10 @@ extract_climat_an <- function(file, variable, periode=10) {
   extract_tous <- NULL
   for(x in 1:length(variable_tous)){
     # x=1
-    fic_temp <- as.data.frame(terra::extract(cartes[[x]][[couche]], tous_pe))
-    if (x==1) extract_tous <- fic_temp
-    if (x>1) extract_tous <- left_join(extract_tous, fic_temp, by='ID')
+    fic_temp <- as.data.frame(terra::extract(cartes[[variable_tous[[x]]]], tous_pe))
+    extract_tous <- bind_cols(extract_tous, fic_temp[,2, drop = FALSE])
   }
-  extract_tous <- extract_tous %>% dplyr::select(-ID)
+  #extract_tous <- extract_tous %>% dplyr::select(-ID)
   names(extract_tous) <- tolower(names(extract_tous))
 
   # calculer la moyenne sur la période
