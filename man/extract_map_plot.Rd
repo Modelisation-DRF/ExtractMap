@@ -7,7 +7,7 @@
 extract_map_plot(file, liste_raster, variable, profondeur = 1)
 }
 \arguments{
-\item{file}{Table de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
+\item{file}{Data frame de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
 \itemize{
  \item id_pe: identifiant du point
  \item latitude: latitude du point en degrés décimales (4326)
@@ -26,7 +26,7 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
 \itemize{
   \item cartes_iqs: iqs_pot_bop, iqs_pot_pex, iqs_pot_epb, iqs_pot_epn, iqs_pot_epr, iqs_pot_pig, iqs_pot_pib, iqs_pot_tho, iqs_pot_sab
   \item cartes_sol : cec, mat_org, ph, sable, limon, argile
-  \item cartes_station : pente, exposition
+  \item cartes_station : pente, exposition, depot
   \item cartes_climat :
     \itemize{
   \item aridity
@@ -61,14 +61,15 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
 }}
 }
 \value{
-Table \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}
+Data frame \code{file} avec les colonnes supplémentaires spécifiées dans \code{variable}
 }
 \description{
 Extrait des valeurs à partir de raster et d'une liste de coordonnées
 }
 \details{
 Il y a un raster par variable. Les rasters sont dans des fichiers tif dans le package.
-Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels de 1 km2. Les cartes de station ont des pixels de 500 m2.
+Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels d'environ 1 km2.
+Les cartes de station ont des pixels de 500 m2.
 }
 \examples{
 \dontrun{

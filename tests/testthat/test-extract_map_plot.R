@@ -21,10 +21,10 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 
 test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les variables de station", {
 
-  variables <- c("pente","exposition")
+  variables <- c("pente","exposition","depot")
   value <- extract_map_plot(file=fic_test, liste_raster="cartes_station", variable=variables)
 
-  nom_obtenu <- names(value)[5:6]
+  nom_obtenu <- names(value)[5:7]
   expect_equal(nom_obtenu, variables)
 
 })
@@ -147,6 +147,22 @@ test_that("La fonction extract_map_plot retourne la bonne valeur de station", {
   valeur_attendu <- c(14, 8) # valeurs dans la carte à resolution  500 x 500 m et arrondi à l'unite
 
   valeur_obtenu <-  round(as.numeric(rbind(value1[1,5], value1[2,5])),1)
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
+})
+
+test_that("La fonction extract_map_plot retourne la bonne valeur de depot", {
+
+  carte <- "cartes_station"
+  variable = c("depot")
+  liste_place <- fic_test
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  valeur_attendu <- c('Tv', 'Tb')
+
+  valeur_obtenu <-  value1[,5]
 
   expect_equal(valeur_obtenu, valeur_attendu)
 
