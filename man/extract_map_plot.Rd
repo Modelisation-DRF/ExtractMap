@@ -10,8 +10,8 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
 \item{file}{Data frame de 3 colonnes, une ligne par point à extraire. La table peut contenir plus d'une ligne par id_pe, comme une liste d'arbres regroupés en placette. La fonction utilise les coordonnées des placettes.
 \itemize{
  \item id_pe: identifiant du point
- \item latitude: latitude du point en degrés décimales (4326)
- \item longitude: longitude du point en degrés décimales (4326)
+ \item latitude: latitude du point en degrés décimales (EPSG:4326)
+ \item longitude: longitude du point en degrés décimales (EPSG:4326)
  }}
 
 \item{liste_raster}{Type de cartes:
@@ -19,6 +19,7 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
   \item "cartes_iqs" : iqs pontentiels
   \item "cartes_sol" : propriétés de sol SIIGSOL
   \item "cartes_climat" : climats normales 30 ans
+  \item "cartes_climat_futur" : climat futur pour 2 RCP et 9 périodes de temps
   \item "cartes_station" : variables de station (pente, exposition, etc.)
   }}
 
@@ -52,12 +53,19 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
   \item utilprecipitation
   \item utilvpd
   }
+  \item cartes_climat_futur :
+    \itemize{
+      \item nom d'une couche : Période_RCP_Variable, ex: 1991-2020_RCP45_Aridity
+      \item Période:  1991-2020, 2001-2030, 2011-2040, 2021-2050, 2031-2060, 2041-2070, 2051-2080, 2061-2090, 2071-2100
+      \item RCP: RCP45 ou RCP85
+      \item Variable: Aridity, CMI, CMIcm, DD, FFP, MSP, Max_ST, Min_WT, PAS, PTot, PUtile, TMoy, TSummer, TmaxUtil, Tmax_yr, TotalVPD, UtilVPD
+  }
   }}
 
 \item{profondeur}{Profondeur pour les propriétés de sols, utilisé seulement si liste_raster="cartes_sol", 1 par défaut
 \itemize{
  \item 1: profondeur 0-5 cm
- \item 2: pronfondeur 5-15 cm
+ \item 2: profondeur 5-15 cm
 }}
 }
 \value{
@@ -67,9 +75,10 @@ Data frame \code{file} avec les colonnes supplémentaires spécifiées dans \cod
 Extrait des valeurs à partir de raster et d'une liste de coordonnées
 }
 \details{
-Il y a un raster par variable. Les rasters sont dans des fichiers tif dans le package.
+Il y a un raster par type de variables. Les rasters sont dans des fichiers tif dans le package.
 Les cartes de climat, d'IQS et de sols sont des rasters avec des pixels d'environ 1 km2.
-Les cartes de station ont des pixels de 500 m2.
+Les cartes de climat futur sont des rasters aux 2 km2
+Les cartes de station ont des pixels de 1 km2.
 }
 \examples{
 \dontrun{
@@ -77,5 +86,6 @@ soil_values <- extract_map_plot(file=fic_test, liste_raster="cartes_sol", variab
 iqs_values <- extract_map_plot(file=fic_test, liste_raster="cartes_iqs", variable=c("iqs_pot_bop","iqs_pot_epn"))
 climat_values <- extract_map_plot(file=fic_test, liste_raster="cartes_climat", variable=c("tmean","totalprecipitation"))
 station_values <- extract_map_plot(file=fic_test, liste_raster="cartes_station", variable=c("pente","exposition"))
+climat_futur_values <- extract_map_plot(file=fic_test, liste_raster="cartes_climat_futur", variable=c("1991-2020_RCP45_Aridity","2071-2100_RCP45_UtilVPD"))
 }
 }

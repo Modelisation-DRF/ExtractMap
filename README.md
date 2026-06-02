@@ -15,6 +15,7 @@ Le package permet d'extraire des valeurs de propriétés de sol, d'IQS potentiel
 - Les cartes de propriétés de sol ont été téléchargées ici: https://www.donneesquebec.ca/recherche/dataset/siigsol-100m-carte-des-proprietes-du-sol, et ont été aggrégées aux 1000x1000m
 - Les IQS potentiels ont été téléchargés ici: https://www.foretouverte.gouv.qc.ca/. La taille d'un pixel est de 1000m x 1000m
 - Les cartes de variables climatiques ont été créées avec le logiciel BioSIM (Régnière et al. 2017) et ont été aggrégés environ aux 1000x1000m
+- Les cartes de variables climatiques futures ont été créées avec le logiciel BioSIM (Régnière et al. 2017) et ont été aggrégés environ aux 2000x2000m
 - Les cartes de station (pente et exposition) ont été créées par Jean Noël, à partir de la carte d'altitude de la DIF.
 - Les cartes des dépôt de surface provient de la carte canadienne des dépôts
 
@@ -52,6 +53,7 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
+| 2026-06-02 | 1.3.4 |  | ajout cartes de climat futur |
 | 2026-04-01 | 1.3.3 |  | ajout carte des depots de surface et remplacer tous les tif par des tif compressés multicouches |
 | 2025-09-24 | 1.3.2 |  | Ménage dans Depends et Imports et ajout package.R pour énumérer tous les @importFrom |
 | 2024-12-11 | 1.3.1 |  | ne supprime plus lignes avec obs manquantes dans la fct extract_climat_an |

@@ -1,3 +1,22 @@
+
+test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les climat futur", {
+
+  # lire la carte du climat futur
+  repertoire = system.file("extdata/CLIMAT/Cartes_climat_futur", package = "ExtractMap")
+  fichier <- list.files(repertoire, full.names = TRUE, pattern = "\\.(tif|gpkg)$", ignore.case = TRUE)
+  cartes <- terra::rast(fichier)
+  variables <- names(cartes)
+  value <- extract_map_plot(file=fic_test, liste_raster="cartes_climat_futur", variable=variables)
+
+  nom_obtenu <- names(value)[5:(306+4)]
+  nom_attendu <- names(cartes)
+  nom_attendu <- paste0('P', nom_attendu)
+  nom_attendu <- gsub("\\-", "_", nom_attendu)
+
+  expect_equal(nom_obtenu, nom_attendu)
+
+})
+
 test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour les IQS", {
 
   variables <- c("iqs_pot_epn","iqs_pot_epb","iqs_pot_pig","iqs_pot_tho","iqs_pot_pib","iqs_pot_epr","iqs_pot_sab","iqs_pot_bop","iqs_pot_pex")
@@ -46,6 +65,12 @@ test_that("La fonction extract_map_plot retourne les bons noms de colonnes pour 
 
 })
 
+
+test_that("La fonction extract_map_plot retourne une erreur si nom des variables de climat futur incorrect", {
+  liste_place <- fic_test
+  variables <- c("aridity", "temperature")
+  expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_climat_futur", variable=variables),"Nom des variables de climat futur demandees incorrect")
+})
 test_that("La fonction extract_map_plot retourne une erreur si nom des variables de climat incorrect", {
   liste_place <- fic_test
   variables <- c("aridity", "temperature")
@@ -82,6 +107,28 @@ test_that("La fonction extract_map_plot retourne une erreur si la variable deman
   liste_place$cec <- 0.5
   variables <- c("cec","sable")
   expect_error(extract_map_plot(file=liste_place, liste_raster="cartes_sol", variable=variables),"Variables demandees deja presentes dans le fichier")
+
+})
+
+test_that("La fonction extract_map_plot retourne la bonne valeur de climat futur", {
+
+  carte <- "cartes_climat_futur"
+  variable = "1991-2020_RCP45_Aridity"
+  liste_place <- fic_test
+  # 47.88455 , -72.64952 = 5621
+  # 47.43823,  -73.37042 = 5323
+
+  value1 <- extract_map_plot(file=liste_place, liste_raster=carte, variable=variable) %>% as.data.frame
+
+  # les valeurs attendues ont été extraites de QGIS, en glissant le fichier tif dans un projet et en mettant les 2 coordoonées dans un fichier excel (je l'ai mis sous data_raw)
+  # on glisse ensuite le fichier excel sur la carte dans QGIS. On verra apparaitre les 2 points en rouge.
+  # zoomer sur les points et sélectionner dans la barre d'outils le sigle i avec une flèche "identifer les entités".
+  # la valeur du point apparait en bas à droit "Résultat de l'identification
+  valeur_attendu <- c(5621/100, 5323/100)
+  valeur_obtenu <- c(value1[1,5], value1[2,5])
+
+  expect_equal(valeur_obtenu, valeur_attendu)
+
 
 })
 
@@ -290,5 +337,26 @@ test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour i
 
 
 })
+
+
+# test_that("La fonction extract_map_plot retourne NA pour coord dans l'eau pour le climat futur", {
+# # avec une carte au 2 km2, il y a une valeur, pour pour le climat, ce n'est pas grave d'avoir un point dans l'eau
+#   carte <- "cartes_climat_futur"
+#   variable = "1991-2020_RCP45_Aridity"
+#   liste_place <- fic_test
+#   liste_place$latitude <- 50.2
+#   liste_place$longitude <- -66.5
+#   liste_place$id_pe <- c('A','B')
+#
+#   value1 <- extract_map_plot(file=liste_place[1,], liste_raster=carte, variable=variable) %>% as.data.frame
+#
+#   valeur_attendu <- c(NaN)
+#   valeur_obtenu <- round(as.numeric(rbind(value1[1,5], value1[2,5], value1[3,5], value1[3,5])),1)
+#   expect_equal(valeur_obtenu, valeur_attendu)
+#
+# })
+
+
+
 
 
