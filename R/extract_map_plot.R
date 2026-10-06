@@ -74,9 +74,9 @@
 #'   }
 #'   \item cartes_climat_futur :
 #'     \itemize{
-#'       \item nom d'une couche : Période_RCP_Variable, ex: 1991-2020_RCP45_Aridity
+#'       \item nom d'une couche : Période_Scénario_Variable, ex: 1991-2020_SSP245_Aridity
 #'       \item Période:  1991-2020, 2001-2030, 2011-2040, 2021-2050, 2031-2060, 2041-2070, 2051-2080, 2061-2090, 2071-2100
-#'       \item RCP: RCP45 ou RCP85
+#'       \item Scénario: SSP245 ou SSP370
 #'       \item Variable: Aridity, CMI, CMIcm, DD, FFP, MSP, Max_ST, Min_WT, PAS, PTot, PUtile, TMoy, TSummer, TmaxUtil, Tmax_yr, TotalVPD, UtilVPD
 #'   }
 #'   }
@@ -105,6 +105,7 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
   # file=fic_test; liste_raster="cartes_climat"; variable=c("totalprecipitation","tmean");
   # file=fic_test; liste_raster="cartes_station"; variable=c("pente","exposition","depot"); profondeur=2;
   # file=fic_test; liste_raster="cartes_climat_futur"; variable=c("1991-2020_RCP45_Aridity","2071-2100_RCP45_UtilVPD");
+  # file=fic_test; liste_raster="cartes_climat_futur"; variable=c("1991-2020_SSP245_Aridity","2071-2100_SSP370_UtilVPD");
 
   # vérifier les noms demandés
   nom_raster <- c("cartes_iqs", "cartes_sol", "cartes_climat", "cartes_station", "cartes_climat_futur")
@@ -122,11 +123,13 @@ extract_map_plot <- function(file, liste_raster, variable, profondeur=1){
 
   nom_climat_futur_var <- c("Aridity", "CMI", "CMIcm", "DD", "FFP", "MSP", "Max_ST", "Min_WT", "PAS", "PTot", "PUtile", "TMoy", "TSummer", "TmaxUtil", "Tmax_yr", "TotalVPD", "UtilVPD")
   nom_climat_futur_per <- c("1991-2020", "2001-2030", "2011-2040", "2021-2050", "2031-2060", "2041-2070", "2051-2080", "2061-2090", "2071-2100")
-  nom_climat_futur_rcp <- c("RCP45","RCP85")
+  #nom_climat_futur_rcp <- c("RCP45","RCP85")
+  nom_climat_futur_scenario <- c("SSP245","SSP370")
   nom_climat_futur <- apply(
       expand.grid(
         nom_climat_futur_per,
-        nom_climat_futur_rcp,
+        #nom_climat_futur_rcp,
+        nom_climat_futur_scenario,
         nom_climat_futur_var,
         stringsAsFactors = FALSE
       ),

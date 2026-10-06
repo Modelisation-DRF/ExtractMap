@@ -55,9 +55,9 @@ extract_map_plot(file, liste_raster, variable, profondeur = 1)
   }
   \item cartes_climat_futur :
     \itemize{
-      \item nom d'une couche : Période_RCP_Variable, ex: 1991-2020_RCP45_Aridity
+      \item nom d'une couche : Période_Scénario_Variable, ex: 1991-2020_SSP245_Aridity
       \item Période:  1991-2020, 2001-2030, 2011-2040, 2021-2050, 2031-2060, 2041-2070, 2051-2080, 2061-2090, 2071-2100
-      \item RCP: RCP45 ou RCP85
+      \item Scénario: SSP245 ou SSP370
       \item Variable: Aridity, CMI, CMIcm, DD, FFP, MSP, Max_ST, Min_WT, PAS, PTot, PUtile, TMoy, TSummer, TmaxUtil, Tmax_yr, TotalVPD, UtilVPD
   }
   }}

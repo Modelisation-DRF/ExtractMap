@@ -53,7 +53,8 @@ De l'aide supplémentaire peut être obtenu sur les fonctions
 
 | Date |  Version  | Issues |      Détails     |
 |:-----|:---------:|:-------|:-----------------|
-| 2026-06-02 | 1.3.4 |  | ajout cartes de climat futur |
+| 2026-10-06 | 1.3.5 |  | changer les cartes de climat futur RCP 4.5 et 8.5 pour les SSP 445 et 370 |
+| 2026-06-02 | 1.3.4 |  | ajout cartes de climat futur RCP 4.5 et 8.5 |
 | 2026-04-01 | 1.3.3 |  | ajout carte des depots de surface et remplacer tous les tif par des tif compressés multicouches |
 | 2025-09-24 | 1.3.2 |  | Ménage dans Depends et Imports et ajout package.R pour énumérer tous les @importFrom |
 | 2024-12-11 | 1.3.1 |  | ne supprime plus lignes avec obs manquantes dans la fct extract_climat_an |
